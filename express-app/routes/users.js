@@ -31,12 +31,13 @@ router.post('/', function (req, res, next) {
 
 router.get('/:id', function (req, res, next) {
     const id = parseInt(req.params.id, 10);
-    const user = users.find(u => u.id === id);
-    if (user) {
-        res.json(user);
-    } else {
-        res.sendStatus(404);
-    }
+    db.all("SELECT id, name FROM users WHERE id = ?", [id], (err, rows) => {
+        if (err) {
+            console.log(err);
+        } else {
+            res.send(rows);
+        }
+    });
 });
 
 module.exports = router;
